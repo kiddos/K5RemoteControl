@@ -1,0 +1,8 @@
+<resources>
+	<string name="app_name">K5 Remote Control Oh Yeah</string>
+	<string name="lock_text">Lock</string>
+	<string name="default_ip">10.1.205.83</string>
+	<string name="status_success">Success</string>
+	<string name="status_fail">Fail</string>
+	<string name="action_setting">Settings</string>
+</resources>
