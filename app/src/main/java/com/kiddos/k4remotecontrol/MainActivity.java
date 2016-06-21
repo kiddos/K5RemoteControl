@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
+import android.view.animation.*;
 import android.widget.*;
 
 import java.io.*;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 	private ImageButton reconnect;
 	private Handler handler;
 	private SendDataTask dataTask;
-	private boolean taskStarted;
+	private boolean taskStarted, connecting;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,25 @@ public class MainActivity extends AppCompatActivity {
 			reconnect.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					Animation anim = new RotateAnimation(0f, 720, Animation.RELATIVE_TO_SELF,
+							0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+					anim.setDuration(2000);
+					anim.setRepeatCount(-1);
+					anim.setAnimationListener(new Animation.AnimationListener() {
+						@Override
+						public void onAnimationStart(Animation animation) {}
+						@Override
+						public void onAnimationEnd(Animation animation) {}
+
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+							if (!connecting) {
+								animation.cancel();
+							}
+						}
+					});
+
+					reconnect.startAnimation(anim);
 					trySendingData();
 				}
 			});
@@ -127,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 			task.start();
 			Log.d("MainActivity", "sending data task started");
 			taskStarted = true;
+			connecting = true;
 		}
 	}
 
@@ -174,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
 			try {
 				Log.i("MainActivity", "connecting to server");
 				Socket socket = new Socket(serverIP.getText().toString(), SERVER_PORT);
+				connecting = false;
 				if (socket.isConnected()) {
 					setServerStatus(true);
 					OutputStream out = socket.getOutputStream();
@@ -193,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 				socket.close();
 				Log.i("MainActivity", "socket closed");
 			} catch (IOException e) {
+				connecting = false;
 				e.printStackTrace();
 				Log.i("MainActivity", "socket io failure");
 			}
