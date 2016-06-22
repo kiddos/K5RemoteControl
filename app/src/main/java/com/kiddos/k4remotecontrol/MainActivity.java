@@ -1,11 +1,9 @@
 package com.kiddos.k4remotecontrol;
 
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.support.v7.app.*;
+import android.os.*;
+import android.text.*;
+import android.util.*;
 import android.view.*;
 import android.view.animation.*;
 import android.widget.*;
@@ -205,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 						sendData(writer);
 
 						try {
-							Thread.sleep(50);
+							Thread.sleep(100);
 						} catch (InterruptedException ie) {
 							ie.printStackTrace();
 						}
